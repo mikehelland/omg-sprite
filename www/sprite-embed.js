@@ -1,13 +1,40 @@
-function OMGEmbeddedViewerCHARACTER(viewer) {
-    
-    var newDiv = document.createElement("div")
-    newDiv.innerHTML = viewer.data.images[0].url
-    viewer.embedDiv.appendChild(newDiv);
+function OMGEmbeddedViewerSPRITE(viewer) {
+    this.data = viewer.data
+    this.embedDiv = viewer.embedDiv
 
-    newDiv = document.createElement("img");
-    newDiv.src = viewer.data.images[0].url
-    newDiv.style.maxWidth = "100%"
-    viewer.embedDiv.appendChild(newDiv);
-    
+    let dir = omg.types["SPRITE"].script
+    dir = dir.substr(0, dir.lastIndexOf("/") + 1)
+
+    console.log(dir + "spriter.js")
+    omg.util.loadScripts([dir + "spriter.js"], () => this.setup())
+
+    this.interval = 250
 }
-if (typeof omg === "object") omg.registerEmbeddedViewer("CHARACTER", OMGEmbeddedViewerCHARACTER)
+
+OMGEmbeddedViewerSPRITE.prototype.setup = function () {
+    var spriters = []
+
+    for (var sheetName in this.data.sheets) {
+        
+        var canvas = document.createElement("canvas")
+        canvas.width = this.data.frameWidth
+        canvas.height = this.data.frameHeight
+        canvas.style.width = canvas.width + "px"
+        canvas.style.height = canvas.height + "px"
+        this.embedDiv.appendChild(canvas)
+
+        var spriter = new OMGSpriter(this.data, canvas)
+        spriter.clearCanvas = true
+        spriter.setSheet(sheetName)
+        spriter.draw()
+    
+        spriters.push(spriter)
+    }
+    
+    setInterval(() => {
+        for (var i = 0; i < spriters.length; i++) {
+            spriters[i].drawNext()
+        }
+    }, this.interval)
+}
+if (typeof omg === "object") omg.registerEmbeddedViewer("SPRITE", OMGEmbeddedViewerSPRITE, document.currentScript.src)

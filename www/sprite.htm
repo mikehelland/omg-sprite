@@ -28,9 +28,6 @@
 
             <hr>
 
-            <div id="thing-url"></div>
-            <img id="thing-img">
-
             <div id="item-list" class="search-info">
             </div>
 
@@ -55,6 +52,8 @@
 
         <script src="/js/usercontrols.js"></script>
         <script src="/js/omgservice.js"></script>
+        <script src="spriter.js"></script>
+    
         <script>
 
 
@@ -104,10 +103,35 @@ if (!params.id) {
     
     omg.server.getId(params.id, function (response) {
         
+        var spriters = []
+
         nameEl.innerHTML = response.name;
-        imgEl.src = response.images[0].url
-        urlEl.innerHTML = response.images[0].url
         
+        var listDiv = document.getElementById("item-list")
+        for (var sheetName in response.sheets) {
+
+            var canvas = document.createElement("canvas")
+            canvas.width = response.frameWidth
+            canvas.height = response.frameHeight
+            canvas.style.width = canvas.width + "px"
+            canvas.style.height = canvas.height + "px"
+            listDiv.appendChild(canvas)
+
+            var spriter = new OMGSpriter(response, canvas)
+            spriter.clearCanvas = true
+            spriter.setSheet(sheetName)
+            spriter.draw()
+        
+            spriters.push(spriter)
+        }
+        
+        setInterval(() => {
+            for (var i = 0; i < spriters.length; i++) {
+                spriters[i].drawNext()
+            }
+        }, 250)
+
+        console.log(spriters)
     });
 }
         </script>
