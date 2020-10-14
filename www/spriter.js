@@ -54,9 +54,11 @@ OMGSpriter.prototype.next = function (sheetName) {
 
     if (this.i >= this.tilesWide) {
         this.i = 0
-        this.j++
-        if (this.j >= this.tilesHigh) {
-            this.j = 0
+        if (this.autoIncrementRow) {
+            this.j++
+            if (this.j >= this.tilesHigh) {
+                this.j = 0
+            }
         }
     }
 }
@@ -64,7 +66,6 @@ OMGSpriter.prototype.next = function (sheetName) {
 OMGSpriter.prototype.setSheet = function (sheetName) {
 
     if (!sheetName) {
-        console.log(this.data.sheets)
         sheetName = Object.keys(this.data.sheets)[0]
     }
 

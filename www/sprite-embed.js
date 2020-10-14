@@ -22,6 +22,7 @@ OMGEmbeddedViewerSPRITE.prototype.setup = function () {
         this.embedDiv.appendChild(canvas)
 
         var spriter = new OMGSpriter(this.data, canvas)
+        spriter.autoIncrementRow = true
         spriter.clearCanvas = true
         spriter.setSheet(sheetName)
         spriter.draw()

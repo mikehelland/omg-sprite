@@ -119,6 +119,7 @@ if (!params.id) {
 
             var spriter = new OMGSpriter(response, canvas)
             spriter.clearCanvas = true
+            spriter.autoIncrementRow = true
             spriter.setSheet(sheetName)
             spriter.draw()
         

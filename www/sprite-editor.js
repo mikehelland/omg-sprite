@@ -145,6 +145,7 @@ var makeListItem = (code, data, parentDiv) => {
     }
     img.onload = e => {
         var spriter = new OMGSpriter(set, canvas)
+        spriter.autoIncrementRow = true
         spriter.setSheet(code)
         spriter.draw()
 
