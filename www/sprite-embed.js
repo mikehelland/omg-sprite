@@ -2,10 +2,8 @@ function OMGEmbeddedViewerSPRITE(viewer) {
     this.data = viewer.data
     this.embedDiv = viewer.embedDiv
 
-    let dir = omg.types["SPRITE"].script
-    dir = dir.substr(0, dir.lastIndexOf("/") + 1)
-
-    console.log(dir + "spriter.js")
+    let dir = omg.types["SPRITE"].path
+    
     omg.util.loadScripts([dir + "spriter.js"], () => this.setup())
 
     this.interval = 250

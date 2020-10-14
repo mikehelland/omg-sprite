@@ -37,6 +37,11 @@ OMGSpriter.prototype.draw = function () {
 
 
 OMGSpriter.prototype.drawNext = function () {
+    this.next()
+    this.draw()
+}
+
+OMGSpriter.prototype.next = function (sheetName) {
     this.i++
 
     if (this.i >= this.tilesWide) {
@@ -46,12 +51,14 @@ OMGSpriter.prototype.drawNext = function () {
             this.j = 0
         }
     }
-
-    this.draw()
 }
 
-
 OMGSpriter.prototype.setSheet = function (sheetName) {
+
+    if (!sheetName) {
+        sheetName = Object.keys(this.data.sheets)[0]
+    }
+
     this.img = document.createElement("img")
     this.img.src = this.data.sheets[sheetName]
     this.img.onload = e => {
