@@ -18,6 +18,14 @@ function OMGSpriter(data, canvas) {
 
     this.i = 0
     this.j = 0
+
+    this.setSheet()
+}
+
+OMGSpriter.prototype.drawXY = function (x, y) {
+    this.x = x
+    this.y = y
+    this.draw()
 }
 
 OMGSpriter.prototype.draw = function () {
@@ -56,6 +64,7 @@ OMGSpriter.prototype.next = function (sheetName) {
 OMGSpriter.prototype.setSheet = function (sheetName) {
 
     if (!sheetName) {
+        console.log(this.data.sheets)
         sheetName = Object.keys(this.data.sheets)[0]
     }
 
