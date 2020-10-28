@@ -1,7 +1,8 @@
 {
+	"name": "sprite",
     "activities": [
 		{"name": "Sprite", "url": "sprite.htm", "views": ["SPRITE"]},
 		{"name": "Sprite Editor", "url": "sprite-editor.htm", "edits": ["SPRITE"]},
-		{"name": "Embedded Sprite Viewer", "url": "sprite-embed.js", "embeds": ["SPRITE"]}
+		{"name": "Embedded Sprite Viewer", "url": "sprite-embed.js", "className": "OMGEmbeddedViewerSPRITE", "embeds": ["SPRITE"]}
 	]
 }

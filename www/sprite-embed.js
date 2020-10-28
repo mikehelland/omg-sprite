@@ -2,7 +2,7 @@ function OMGEmbeddedViewerSPRITE(viewer) {
     this.data = viewer.data
     this.embedDiv = viewer.embedDiv
 
-    let dir = omg.types["SPRITE"].path
+    let dir = omg.apps["sprite"].path
     
     omg.util.loadScripts([dir + "spriter.js"], () => this.setup())
 
@@ -36,4 +36,3 @@ OMGEmbeddedViewerSPRITE.prototype.setup = function () {
         }
     }, this.interval)
 }
-if (typeof omg === "object") omg.registerEmbeddedViewer("SPRITE", OMGEmbeddedViewerSPRITE, document.currentScript.src)
