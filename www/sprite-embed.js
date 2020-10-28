@@ -3,10 +3,10 @@ function OMGEmbeddedViewerSPRITE(viewer) {
     this.embedDiv = viewer.embedDiv
 
     let dir = omg.apps["sprite"].path
-    
-    omg.util.loadScripts([dir + "spriter.js"], () => this.setup())
 
     this.interval = 250
+    
+    omg.util.loadScripts([dir + "spriter.js"], () => this.setup())
 }
 
 OMGEmbeddedViewerSPRITE.prototype.setup = function () {
