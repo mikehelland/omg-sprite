@@ -85,10 +85,33 @@ var makeListItem = (code, data, parentDiv) => {
     var caption = document.createElement("span")
     caption.innerHTML = "URL: "
     inputRow.appendChild(caption)
+    
     var urlInput = document.createElement("input")
-    urlInput.value = data
+    urlInput.value = typeof data === "string" ? data : data.url
     urlInput.className = "list-item-url-input"
     inputRow.appendChild(urlInput)
+
+    caption = document.createElement("span")
+    caption.innerHTML = "Piskel: "
+    inputRow.appendChild(caption)
+
+    var sourceInput = document.createElement("input")
+    sourceInput.value = data.projectFile || ""
+    sourceInput.className = "list-item-url-input"
+    inputRow.appendChild(sourceInput)
+
+    var editButton = document.createElement("button")
+    editButton.innerHTML = "Edit"
+    inputRow.appendChild(editButton)
+
+    editButton.onclick = () => {
+        var url = "/apps/piskel/editor/?update_id=" + set.id + "&sheet=" + nameInput.value
+        if (sourceInput.value) {
+            url += "&edit=" + encodeURIComponent(sourceInput.value)
+        }
+        window.open(url)
+    }
+
 
     parentDiv.appendChild(div)
 
@@ -141,7 +164,7 @@ var makeListItem = (code, data, parentDiv) => {
     canvas.height = set.frameHeight
     img.className = "sprite-img"
     if (data) {
-        img.src = data
+        img.src = data.url || data
     }
     img.onload = e => {
         var spriter = new OMGSpriter(set, canvas)
@@ -156,7 +179,7 @@ var makeListItem = (code, data, parentDiv) => {
     div.appendChild(canvas)
     div.appendChild(img)
 
-    inputs.data.push({nameInput: nameInput, urlInput, urlInput})
+    inputs.data.push({nameInput: nameInput, urlInput, sourceInput})
     return {urlInput, canvas, img}
 }
 
@@ -254,7 +277,10 @@ var submit = (cb) => {
 
     set.sheets = {}
     inputs.data.forEach(item => {
-        set.sheets[item.nameInput.value] = item.urlInput.value
+        set.sheets[item.nameInput.value] = {
+            url: item.urlInput.value,
+            projectFile: item.sourceInput.value
+        }
     })
 
     omg.server.post(set, function (response) {

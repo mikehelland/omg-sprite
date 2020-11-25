@@ -34,13 +34,14 @@ OMGSpriter.prototype.draw = function () {
         this.canvas.width = this.canvas.width
     }
 
-    this.context.drawImage(this.img, 
-        this.frameWidth * this.i, 
-        this.frameHeight * this.j, 
-        this.frameWidth, 
-        this.frameHeight,
-        this.x, this.y, this.w, this.h)
-
+    if (this.loaded) {
+        this.context.drawImage(this.img, 
+            this.frameWidth * this.i, 
+            this.frameHeight * this.j, 
+            this.frameWidth, 
+            this.frameHeight,
+            this.x, this.y, this.w, this.h)
+    }
 }
 
 
@@ -70,10 +71,13 @@ OMGSpriter.prototype.setSheet = function (sheetName) {
     }
 
     this.img = document.createElement("img")
-    this.img.src = this.data.sheets[sheetName]
+    console.log(this.data.sheets[sheetName].url)
+    this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
     this.img.onload = e => {
+        this.loaded = true
         this.tilesWide = this.img.width / this.frameWidth
         this.tilesHigh = this.img.height / this.frameHeight
         this.draw()
     }
+    this.img.onerror = console.error
 }
