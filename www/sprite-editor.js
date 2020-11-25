@@ -5,6 +5,7 @@ var inputs = {name: document.getElementById("set-name"),
     frameWidth: document.getElementById("frame-width")
 };
 var set = {}
+set.sheets = {}
 set.type = "SPRITE"
 set.frameHeight = 128
 set.frameWidth = 128
@@ -26,12 +27,23 @@ var setupPage = () => {
     }
 
     if (params.use) {
+
+        //check to make sure it's a PISKEL type?
         fetch(window.location.origin + "/data/" + params.use).then(res=>res.json()).then(data => {
-            makeListItem(params.use, {projectFile: window.location.origin + "/data/" + params.use})
+            var url = window.location.origin + "/data/" + params.use
+
+            set.sheets[params.use] = {
+                url: data.framesheet_as_png,
+                projectFile: url
+            }
+            
+            makeListItem(params.use, set.sheets[params.use])
+            
             set.height = data.height
             set.width = data.width
             inputs.frameHeight.value = data.height
             inputs.frameWidth.value = data.width
+
         }).catch(console.error)
         
     }
@@ -122,7 +134,7 @@ var makeListItem = (code, data, parentDiv) => {
             if (sourceInput.value) {
                 url += "&edit=" + encodeURIComponent(sourceInput.value)
             }
-            window.open(url)
+            window.location = url
         }
 
         if (set.id) {
@@ -314,7 +326,7 @@ var submit = (cb) => {
             set.id = response.id
         }
         if (set.draft) {
-            history.pushState({},"",window.location.origin + window.location.pathname + "?id=" + response.id)
+            //history.pushState({},"",window.location.origin + window.location.pathname + "?id=" + response.id)
         }
 
         if (cb) {
