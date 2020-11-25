@@ -24,6 +24,17 @@ var setupPage = () => {
             set = response
         });
     }
+
+    if (params.use) {
+        fetch(window.location.origin + "/data/" + params.use).then(res=>res.json()).then(data => {
+            makeListItem(params.use, {projectFile: window.location.origin + "/data/" + params.use})
+            set.height = data.height
+            set.width = data.width
+            inputs.frameHeight.value = data.height
+            inputs.frameWidth.value = data.width
+        }).catch(console.error)
+        
+    }
 }
 
 var setInputs = (data) => {
@@ -87,7 +98,7 @@ var makeListItem = (code, data, parentDiv) => {
     inputRow.appendChild(caption)
     
     var urlInput = document.createElement("input")
-    urlInput.value = typeof data === "string" ? data : data.url
+    urlInput.value = typeof data === "string" ? data : data.url || "" 
     urlInput.className = "list-item-url-input"
     inputRow.appendChild(urlInput)
 
@@ -105,11 +116,26 @@ var makeListItem = (code, data, parentDiv) => {
     inputRow.appendChild(editButton)
 
     editButton.onclick = () => {
-        var url = "/apps/piskel/editor/?update_id=" + set.id + "&sheet=" + nameInput.value
-        if (sourceInput.value) {
-            url += "&edit=" + encodeURIComponent(sourceInput.value)
+
+        var openEditor = () => {
+            var url = "/apps/piskel/editor/?update_id=" + set.id + "&sheet=" + nameInput.value
+            if (sourceInput.value) {
+                url += "&edit=" + encodeURIComponent(sourceInput.value)
+            }
+            window.open(url)
         }
-        window.open(url)
+
+        if (set.id) {
+            openEditor()
+        }
+        else {
+            set.draft = true
+            submit((res) => {
+                set.user_id = res.user_id
+                set.username = res.username
+                openEditor()
+            })
+        }
     }
 
 
@@ -287,6 +313,10 @@ var submit = (cb) => {
         if (response.id) {
             set.id = response.id
         }
+        if (set.draft) {
+            history.pushState({},"",window.location.origin + window.location.pathname + "?id=" + response.id)
+        }
+
         if (cb) {
             cb(response)
         }
