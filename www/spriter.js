@@ -81,3 +81,7 @@ OMGSpriter.prototype.setSheet = function (sheetName) {
     }
     this.img.onerror = console.error
 }
+
+OMGSpriter.prototype.setRow = function (j) {
+    this.j = j < this.tilesHigh ? j : 0
+}
