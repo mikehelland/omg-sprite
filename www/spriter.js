@@ -71,7 +71,6 @@ OMGSpriter.prototype.setSheet = function (sheetName) {
     }
 
     this.img = document.createElement("img")
-    console.log(this.data.sheets[sheetName].url)
     this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
     this.img.onload = e => {
         this.loaded = true
