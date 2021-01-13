@@ -20,6 +20,8 @@ function OMGSpriter(data, canvas) {
     this.j = 0
 
     this.setSheet()
+
+    this.drawBorder = false
 }
 
 OMGSpriter.prototype.drawXY = function (x, y) {
@@ -41,6 +43,10 @@ OMGSpriter.prototype.draw = function () {
             this.frameWidth, 
             this.frameHeight,
             this.x, this.y, this.w, this.h)
+    }
+
+    if (this.drawBorder) {
+        this.context.strokeRect(this.x, this.y, this.w, this.h)
     }
 }
 
