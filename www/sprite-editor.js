@@ -217,7 +217,7 @@ var makeListItem = (code, data, parentDiv) => {
     div.appendChild(canvas)
     div.appendChild(img)
 
-    inputs.data.push({nameInput: nameInput, urlInput, sourceInput})
+    inputs.data.push({code, nameInput: nameInput, urlInput, sourceInput, parentDiv})
     return {urlInput, canvas, img}
 }
 
@@ -320,6 +320,7 @@ var submit = (cb) => {
             projectFile: item.sourceInput.value
         }
     })
+    console.log(set.sheets)
 
     omg.server.post(set, function (response) {
         if (response.id) {
@@ -330,35 +331,39 @@ var submit = (cb) => {
         }
 
         if (cb) {
-            cb(response)
+            //cb(response)
         }
     });
 };
 
 var moveUp = function (item) {
 
-    var i = set.data.indexOf(item) 
-    if (i < 1) {
-        return
+    for (var i = 0; i < inputs.data.length; i++) {
+        if (inputs.data[i].code === item) {
+
+            if (i > 0) {
+                var o = inputs.data.splice(i, 1)[0]
+                inputs.data.splice(i - 1, 0, o)
+
+                var parent = o.parentDiv.parentElement
+                parent.removeChild(o.parentDiv)
+                parent.insertBefore(o.parentDiv, inputs.data[i].parentDiv)
+            }
+            break
+        }
     }
-
-    set.data.splice(i, 1)
-    set.data.splice(i - 1, 0, item)
-
-    setList(set)
 }
 
 var moveDown = function (item) {
-
-    var i = set.data.indexOf(item) 
-    if (i > -1 && i > set.data.length - 1) {
-        return
+    for (var i = 0; i < inputs.data.length; i++) {
+        if (inputs.data[i].code === item) {
+            if (i < inputs.length - 1) {
+                var o = inputs.data.splice(i, 1)
+                inputs.data.splice(i + 1, 0, o[0])
+            }
+            break
+        }
     }
-
-    set.data.splice(i, 1)
-    set.data.splice(i + 1, 0, item)
-
-    setList(set)
 }
 
 var remove = function (item) {

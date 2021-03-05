@@ -75,6 +75,7 @@ OMGSpriter.prototype.setSheet = function (sheetName) {
     if (!sheetName) {
         sheetName = Object.keys(this.data.sheets)[0]
     }
+    this.sheetName = sheetName
 
     this.img = document.createElement("img")
     this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
