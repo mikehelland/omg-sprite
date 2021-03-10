@@ -6,10 +6,12 @@ function OMGEmbeddedViewerSPRITE(viewer) {
 
     this.interval = 250
     
-    omg.util.loadScripts([dir + "spriter.js"], () => this.setup())
+    import("/apps/sprite/spriter.js").then(o => {
+        this.setup(o.default)
+    })
 }
 
-OMGEmbeddedViewerSPRITE.prototype.setup = function () {
+OMGEmbeddedViewerSPRITE.prototype.setup = function (OMGSpriter) {
     var spriters = []
 
     for (var sheetName in this.data.sheets) {

@@ -1,4 +1,4 @@
-function OMGSpriter(data, canvas) {
+export default function OMGSpriter(data, canvas) {
 
     this.canvas = canvas
     this.data = data
@@ -19,6 +19,7 @@ function OMGSpriter(data, canvas) {
     this.i = 0
     this.j = 0
 
+    this.loadedSheets = {}
     this.setSheet()
 
     this.drawBorder = false
@@ -77,15 +78,21 @@ OMGSpriter.prototype.setSheet = function (sheetName) {
     }
     this.sheetName = sheetName
 
-    this.img = document.createElement("img")
-    this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
-    this.img.onload = e => {
-        this.loaded = true
-        this.tilesWide = this.img.width / this.frameWidth
-        this.tilesHigh = this.img.height / this.frameHeight
-        this.draw()
+    if (this.loadedSheets[this.sheetName]) {
+        this.img = this.loadedSheets[this.sheetName]
     }
-    this.img.onerror = console.error
+    else {
+        this.img = document.createElement("img")
+        this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
+        this.img.onload = e => {
+            this.loaded = true
+            this.tilesWide = this.img.width / this.frameWidth
+            this.tilesHigh = this.img.height / this.frameHeight
+            this.draw()
+        }
+        this.img.onerror = console.error
+        this.loadedSheets[this.sheetName] = this.img
+    }
 }
 
 OMGSpriter.prototype.setRow = function (j) {
