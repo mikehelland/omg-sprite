@@ -20,7 +20,6 @@ export default function OMGSpriter(data, canvas) {
     this.j = 0
 
     this.loadedSheets = {}
-    this.setSheet()
 
     this.drawBorder = false
 }
@@ -72,27 +71,33 @@ OMGSpriter.prototype.next = function (sheetName) {
 }
 
 OMGSpriter.prototype.setSheet = function (sheetName) {
+    return new Promise((resolve, reject) => {
+        if (!sheetName) {
+            sheetName = Object.keys(this.data.sheets)[0]
+        }
+        this.sheetName = sheetName
 
-    if (!sheetName) {
-        sheetName = Object.keys(this.data.sheets)[0]
-    }
-    this.sheetName = sheetName
-
-    if (this.loadedSheets[this.sheetName]) {
-        this.img = this.loadedSheets[this.sheetName]
-    }
-    else {
-        this.img = document.createElement("img")
-        this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
-        this.img.onload = e => {
-            this.loaded = true
+        if (this.loadedSheets[this.sheetName]) {
+            this.img = this.loadedSheets[this.sheetName]
             this.tilesWide = this.img.width / this.frameWidth
             this.tilesHigh = this.img.height / this.frameHeight
-            this.draw()
+                
+            resolve()
         }
-        this.img.onerror = console.error
-        this.loadedSheets[this.sheetName] = this.img
-    }
+        else {
+            this.img = document.createElement("img")
+            this.img.src = this.data.sheets[sheetName].url || this.data.sheets[sheetName] 
+            this.img.onload = e => {
+                this.loaded = true
+                this.tilesWide = this.img.width / this.frameWidth
+                this.tilesHigh = this.img.height / this.frameHeight
+                //this.draw()
+                resolve()
+            }
+            this.img.onerror = () => reject()
+            this.loadedSheets[this.sheetName] = this.img
+        }
+    })
 }
 
 OMGSpriter.prototype.setRow = function (j) {
