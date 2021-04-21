@@ -67,6 +67,12 @@
             .list-item-url-input {
                 flex-grow: 1;
             }
+            #error-log {
+                color: red;
+                padding:12px;
+                border:1px solid black;
+                display: none;
+            }
         </style>
 
     </head>
@@ -103,6 +109,8 @@
             <a href="#" id="add-item">Add</a>
             <hr>
 
+            <div id="error-log"></div>
+
             <button class="main-create-something" id="submit-button">Submit</button>
 
         </div>
@@ -110,7 +118,6 @@
         <script src="/js/usercontrols.js"></script>
 
         <script src="/js/omgservice.js"></script>
-        <script src="spriter.js"></script>
         <script src="sprite-editor.js"></script>
     </body>
 </html>

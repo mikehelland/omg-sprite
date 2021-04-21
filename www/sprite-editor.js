@@ -204,18 +204,20 @@ var makeListItem = (code, data, parentDiv) => {
     if (data) {
         img.src = data.url || data
     }
-    img.onload = e => {
-        var spriter = new OMGSpriter(set, canvas)
+
+    div.appendChild(document.createElement("hr"))
+    div.appendChild(canvas)
+    div.appendChild(img)
+
+    img.onload = async e => {
+        let OMGSpriter = await import("/apps/sprite/spriter.js")
+        var spriter = new OMGSpriter.default(set, canvas)
         spriter.autoIncrementRow = true
         spriter.setSheet(code)
         spriter.draw()
 
         spriters.push(spriter)
     }
-
-    div.appendChild(document.createElement("hr"))
-    div.appendChild(canvas)
-    div.appendChild(img)
 
     inputs.data.push({code, nameInput: nameInput, urlInput, sourceInput, parentDiv})
     return {urlInput, canvas, img}
@@ -323,8 +325,14 @@ var submit = (cb) => {
     console.log(set.sheets)
 
     omg.server.post(set, function (response) {
+        console.log(response)
         if (response.id) {
             set.id = response.id
+        }
+        else {
+            let errorLog = document.getElementById("error-log")
+            errorLog.style.display = "block"
+            errorLog.innerHTML = response.error
         }
         if (set.draft) {
             //history.pushState({},"",window.location.origin + window.location.pathname + "?id=" + response.id)
@@ -389,3 +397,12 @@ omg.server.getUser(user => {
         setupPage()
     }
 })
+
+var ispri
+setInterval(() => {
+    
+    for (ispri of spriters) {
+        ispri.next()
+        ispri.draw()
+    }
+}, 250);
