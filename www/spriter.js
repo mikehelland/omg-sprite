@@ -72,7 +72,7 @@ OMGSpriter.prototype.next = function (sheetName) {
 
 OMGSpriter.prototype.setSheet = function (sheetName) {
     return new Promise((resolve, reject) => {
-        if (!sheetName) {
+        if (!sheetName || !this.data.sheets[sheetName]) {
             sheetName = Object.keys(this.data.sheets)[0]
         }
         this.sheetName = sheetName
