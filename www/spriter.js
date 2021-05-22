@@ -94,7 +94,11 @@ OMGSpriter.prototype.setSheet = function (sheetName) {
                 //this.draw()
                 resolve()
             }
-            this.img.onerror = () => reject()
+            this.img.onerror = () => {
+                console.error("could not load sprite sheet: " + sheetName)
+                console.error(this.data)
+                reject()
+            }
             this.loadedSheets[this.sheetName] = this.img
         }
     })

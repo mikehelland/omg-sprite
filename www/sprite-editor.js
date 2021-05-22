@@ -217,6 +217,7 @@ var makeListItem = (code, data, parentDiv) => {
         spriter.draw()
 
         spriters.push(spriter)
+        spriter.clearCanvas = () => canvas.width = canvas.width
     }
 
     inputs.data.push({code, nameInput: nameInput, urlInput, sourceInput, parentDiv})
@@ -325,17 +326,21 @@ var submit = (cb) => {
     console.log(set.sheets)
 
     omg.server.post(set, function (response) {
+        let errorLog = document.getElementById("error-log")
+            
         console.log(response)
         if (response.id) {
+            var url = window.location.origin + window.location.pathname + "?id=" + response.id
             set.id = response.id
+            errorLog.style.display = "block"
+            errorLog.innerHTML = "Saved! <a href='" + url + "'>" + url + "</a>"
         }
         else {
-            let errorLog = document.getElementById("error-log")
             errorLog.style.display = "block"
-            errorLog.innerHTML = response.error
+            errorLog.innerHTML = "<span style='color:red;'>" + response.error + "</span>"
         }
         if (set.draft) {
-            //history.pushState({},"",window.location.origin + window.location.pathname + "?id=" + response.id)
+            //history.pushState({},"",)
         }
 
         if (cb) {
@@ -402,6 +407,7 @@ var ispri
 setInterval(() => {
     
     for (ispri of spriters) {
+        ispri.clearCanvas()
         ispri.next()
         ispri.draw()
     }
