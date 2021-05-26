@@ -325,6 +325,10 @@ var submit = (cb) => {
     })
     console.log(set.sheets)
 
+    if (set.id && set.user_id !== omg.user.id) {
+        delete set.id
+    }
+
     omg.server.post(set, function (response) {
         let errorLog = document.getElementById("error-log")
             
